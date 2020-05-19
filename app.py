@@ -1,7 +1,9 @@
 import gspread
 from flask import Flask, render_template, request
+import pathlib
 
-client = gspread.service_account(filename='/app/snhs-points-checker-2c4f229c7577.json')
+filepath = pathlib.Path().absolute()
+client = gspread.service_account(filename=str(filepath) + '\snhs-points-checker-2c4f229c7577.json')
 db = client.open("Member Database 2020-21")
 
 app = Flask(__name__)
