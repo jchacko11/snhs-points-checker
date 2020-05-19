@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>SNHS Points</title>
+    <link href="../static/style.css" rel="stylesheet" type="text/css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+    </script>
+</head>
+
+<body>
+<div class="center">
+    <div class="inside">
+        <nav class="center-nice">
+            <a href="https://www.snhs.club/" target="_blank">Home</a>
+            <a href="https://www.snhs.club/activities/tutoring" target="_blank">Point Request</a>
+            <a href="https://www.snhs.club/about-us" target="_blank">About</a>
+        </nav>
+
+        <h2 class="center-nice">Check Points</h2>
+
+        <form action="{{ url_for('member_data') }}">
+            <input placeholder="Student ID" autocomplete="off" class="center-nice" type="tel" id="studentId"
+                   name="member_id"
+                   maxlength="6"><br>
+            <input type="submit" class="center-nice" id="search" disabled>
+        </form>
+
+        <br>
+
+        {% if valid == False %}
+        <div class="center-nice" id="result"> Not Found</div>
+        {% elif valid == True %}
+        <div class="center-nice" id="result">{{ member["Points"]}} Points</div>
+        <ul class="center-nice sortable" id="items">
+            {% for item in member_details %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+
+        {% endif %}
+
+    </div>
+</div>
+<script src="../static/script.js"></script>
+</body>
+</html>
