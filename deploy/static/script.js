@@ -25,7 +25,6 @@ $(document).ready(function () {
     // make sure 6 digits before allowing submit
     $("#studentId").on("change load keyup paste", function () {
         var value = $(this).val()
-        console.log(value)
         if (value.length == 6) {
             $(search).attr("disabled", false)
         } else {
