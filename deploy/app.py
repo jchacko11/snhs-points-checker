@@ -3,7 +3,11 @@ from flask import Flask, render_template, request
 import pathlib
 
 filepath = pathlib.Path().absolute()
-client = gspread.service_account(filename=str(filepath) + '\snhs-points-checker-2c4f229c7577.json')
+if filepath == "/app":
+    client = gspread.service_account(filename="/app/snhs-points-checker-2c4f229c7577.json")
+else:
+    client = gspread.service_account(filename="snhs-points-checker-2c4f229c7577.json")
+
 db = client.open("Member Database 2020-21")
 
 app = Flask(__name__)
@@ -22,6 +26,7 @@ def get_member(member_id):
         return False
 
 
+# returns an array of strings with the point output for a category
 def get_specifics(member_id, sheet_name='Meeting Attendance'):
     sheet = db.worksheet(sheet_name)
     all_values = sheet.get_all_values()
@@ -45,9 +50,17 @@ def get_specifics(member_id, sheet_name='Meeting Attendance'):
         else:
             modified_meetings.append(attended_meetings[i])
 
-        print(modified_meetings)
-
     return modified_meetings
+
+
+# gets the number of requested points
+def get_requested(member_id):
+    sheet = db.worksheet('Master')
+    all_values = sheet.get_all_records()
+
+    for record in all_values:
+        if record['Student ID'] == member_id:
+            return record['Points Request']
 
 
 @app.route('/')
@@ -64,7 +77,19 @@ def member_data():
 
     member = get_member(member_id)
 
-    member_details = get_specifics(member_id, sheet_name='Meeting Attendance') + get_specifics(member_id, sheet_name='Events')
+    sheets = ['Meeting Attendance', 'Events', 'Shirts', 'Other']
+
+    # populate array with get_specifics for each sheet
+    sheet_info_array = list(map(lambda sheet: get_specifics(member_id, sheet_name=sheet), sheets))
+
+    # combine all arrays
+    member_details = []
+    [member_details.extend(details) for details in sheet_info_array]
+
+    # add special case for requested points
+    requested_points = get_requested(member_id)
+    if requested_points:
+        member_details.append("Points Request (" + str(get_requested(member_id)) + " points)")
 
     if member is not False:
         return render_template("index.html", member=member, member_details=member_details, valid=True)
