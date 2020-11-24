@@ -18,21 +18,28 @@
 
 
 $(document).ready(function () {
-    $("#studentId").inputFilter(function (value) {
-        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
-    });
+
+    // Allow digits only, using a RegExp
+    $("#studentId").inputFilter(value => /^\d*$/.test(value))
 
     // make sure 6 digits before allowing submit
     $("#studentId").on("change load keyup paste", function () {
-        var value = $(this).val()
-        if (value.length == 6) {
-            $(search).attr("disabled", false)
-        } else {
-            $(search).attr("disabled", true)
-        }
-
+        $('#search').attr("disabled", $(this).val().length !== 6)
     })
 
+    // Check for click events on the navbar burger icon
+    $(".navbar-burger").click(function () {
+
+        // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+        $(".navbar-burger").toggleClass("is-active");
+        $(".navbar-menu").toggleClass("is-active");
+
+    });
+
+
+    $('#search').click(function () {
+        $(this).addClass("is-loading")
+    })
 
 });
 

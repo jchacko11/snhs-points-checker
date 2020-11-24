@@ -5,45 +5,135 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <title>SNHS Points</title>
-    <link href="../static/style.css" rel="stylesheet" type="text/css"/>
+    <!--    <link href="../static/style.css" rel="stylesheet" type="text/css"/>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
     </script>
+
+    <!--        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulmaswatch/0.8.1/darkly/bulmaswatch.min.css"
+          integrity="sha512-lLXTQR9X0YWtbfqUt47t7cXs2b7SWbMqGD4YdOYkCXDeTCm4+Mm84OhHl/pz2sd6ievpE+VE+/qdtvJE8uhcdA=="
+          crossorigin="anonymous"/>
 </head>
 
 <body>
-<div class="center">
-    <div class="inside">
-        <nav class="center-nice">
-            <a href="https://www.snhs.club/" target="_blank">Home</a>
-            <a href="https://www.snhs.club/activities/tutoring" target="_blank">Point Request</a>
-            <a href="https://www.snhs.club/about-us" target="_blank">About</a>
-        </nav>
 
-        <h2 class="center-nice">Check Points</h2>
+<style>
+    .mt-5 {
+        margin-top: 1.5rem !important;
+    }
 
-        <form action="{{ url_for('member_data') }}">
-            <input placeholder="Student ID" autocomplete="off" class="center-nice" type="tel" id="studentId"
-                   name="member_id"
-                   maxlength="6"><br>
-            <input type="submit" class="center-nice" id="search" disabled>
-        </form>
+    .mt-1 {
+        margin-top: 0.5rem !important;
+    }
 
-        <br>
+    .mb-0 {
+        margin-bottom: 0 !important;
+    }
 
-        {% if valid == False %}
-        <div class="center-nice" id="result"> Not Found</div>
-        {% elif valid == True %}
-        <div class="center-nice" id="result">{{ member["Points"]}} Points</div>
-        <ul class="center-nice sortable" id="items">
-            {% for item in member_details %}
-            <li>{{ item }}</li>
-            {% endfor %}
-        </ul>
+    .message-body {
+        border-width: 0 0 0 4px;
+    }
 
-        {% endif %}
+    .has-text-success-dark {
+        color: #1d8147 !important;
+    }
 
+</style>
+
+<section class="hero is-primary is-fullheight-with-navbar">
+    <div class="hero-body">
+        <div class="container">
+            <p class="title is-2">
+                Check Points
+            </p>
+
+            <form action="{{ url_for('member_data') }}">
+                <div class="field is-grouped">
+                    <div class="control is-expanded">
+                        <input placeholder="Student ID" autocomplete="off" class="input is-large" type="tel"
+                               id="studentId"
+                               name="member_id"
+                               maxlength="6">
+                    </div>
+                    <div class="control">
+                        <button type="submit" class="button is-dark is-large" id="search" disabled>Search</button>
+                    </div>
+                </div>
+
+            </form>
+
+            {% if valid == False %}
+            <article class="message is-danger mt-5">
+                <div class="message-body">
+                    <h2 class="is-size-3 has-text-weight-medium">Record Not Found</h2>
+                </div>
+            </article>
+
+            {% elif valid == True %}
+            <article class="message is-success mt-5">
+                <div class="message-body">
+                    <h2 class="title has-text-success-dark is-4">Points Log - {{member["Student ID"]}}</h2>
+                    <h2 class="subtitle has-text-success-dark is-2 mb-0">{{ member["Points"]}} Points</h2>
+
+                    <div class="content">
+                        <ul class="mt-1">
+                            {% for item in member_details %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </article>
+
+            {% endif %}
+
+
+        </div>
     </div>
-</div>
+</section>
+
+<nav class="navbar is-dark is-fixed-bottom">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="https://bulma.io">
+                <b>SNHS Points Checker</b>
+            </a>
+            <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div class="navbar-menu has-background-dark">
+            <div class="navbar-start">
+                <a class="navbar-item" href="https://www.snhs.club/">
+                    Home
+                </a>
+                <a class="navbar-item" href="https://www.snhs.club/about-us">
+                    About
+                </a>
+            </div>
+
+            <div class="navbar-end">
+
+                <div class="navbar-item">
+
+                    <div class="field is-grouped">
+                        <p class="control">
+                            <a class="button is-primary"
+                               href="https://www.snhs.club/activities/tutoring">
+                                <span>Point Request</span>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</nav>
+
 <script src="../static/script.js"></script>
 </body>
 </html>
