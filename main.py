@@ -1,6 +1,7 @@
 import gspread
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import pathlib
+import os
 
 filepath = pathlib.Path().absolute()
 filename = ("/app/" if filepath == "/app" else "") + "snhs-points-checker-2c4f229c7577.json"
@@ -93,6 +94,15 @@ def member_data():
         return render_template("index.html", member=member, member_details=member_details, valid=True)
     else:
         return render_template("index.html", valid=False)
+
+
+@app.before_request
+def before_request():
+    if 'FLASK_DEPLOY_APP_ENGINE' in os.environ:
+        if request.url.startswith('http://'):
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)
 
 
 if __name__ == '__main__':
