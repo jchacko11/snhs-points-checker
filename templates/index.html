@@ -43,49 +43,60 @@
 <section class="hero is-primary is-fullheight-with-navbar">
     <div class="hero-body">
         <div class="container">
-            <p class="title is-2">
-                Check Points
-            </p>
 
-            <form action="{{ url_for('member_data') }}">
-                <div class="field has-addons">
-                    <div class="control">
-                        <input placeholder="Student ID" autocomplete="off" class="input is-large" type="tel"
-                               id="studentId"
-                               name="member_id"
-                               maxlength="6">
-                    </div>
-                    <div class="control">
-                        <button type="submit" class="button is-dark is-large" id="search" disabled>Search</button>
-                    </div>
+            <div class="columns is-vcentered">
+                <div class="column">
+                    <p class="title is-2">
+                        Check Points
+                    </p>
+
+                    <form action="{{ url_for('member_data') }}">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input placeholder="Student ID" autocomplete="off" class="input is-large" type="tel"
+                                       id="studentId"
+                                       name="member_id"
+                                       maxlength="6">
+                            </div>
+                            <div class="control">
+                                <button type="submit" class="button is-dark is-large" id="search" disabled>Search
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                {% if valid == False %}
+                <div class="column">
+                    <article class="message is-danger mt-5">
+                        <div class="message-body" style="margin-top: 2rem">
+                            <h2 class="is-size-3 has-text-weight-medium">Record Not Found</h2>
+                        </div>
+                    </article>
                 </div>
 
-            </form>
+                {% elif valid == True %}
+                <div class="column">
+                    <article class="message is-success mt-5">
+                        <div class="message-body">
+                            <h2 class="title has-text-success-dark is-4">Points Log - {{member["Student ID"]}}</h2>
+                            <h2 class="subtitle has-text-success-dark is-2 mb-0">{{ member["Points"]}} Points</h2>
 
-            {% if valid == False %}
-            <article class="message is-danger mt-5">
-                <div class="message-body">
-                    <h2 class="is-size-3 has-text-weight-medium">Record Not Found</h2>
+                            <div class="content">
+                                <ul class="mt-1">
+                                    {% for item in member_details %}
+                                    <li>{{ item }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </article>
                 </div>
-            </article>
 
-            {% elif valid == True %}
-            <article class="message is-success mt-5">
-                <div class="message-body">
-                    <h2 class="title has-text-success-dark is-4">Points Log - {{member["Student ID"]}}</h2>
-                    <h2 class="subtitle has-text-success-dark is-2 mb-0">{{ member["Points"]}} Points</h2>
 
-                    <div class="content">
-                        <ul class="mt-1">
-                            {% for item in member_details %}
-                            <li>{{ item }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </article>
+                {% endif %}
 
-            {% endif %}
+            </div>
 
 
         </div>
@@ -95,7 +106,7 @@
 <nav class="navbar is-dark is-fixed-bottom">
     <div class="container">
         <div class="navbar-brand">
-            <a class="navbar-item" href="https://bulma.io">
+            <a class="navbar-item" href="/">
                 <b>SNHS Points Checker</b>
             </a>
             <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
